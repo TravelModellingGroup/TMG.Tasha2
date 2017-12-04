@@ -17,6 +17,8 @@
     along with TMG.Tasha2.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMG;
 
@@ -25,7 +27,7 @@ namespace TMG.Tasha2.Data
     /// <summary>
     /// Represents a single household
     /// </summary>
-    public sealed class Household
+    public sealed class Household : IEnumerable<Person>
     {
         /// <summary>
         /// A unique identifier for this household.
@@ -45,30 +47,33 @@ namespace TMG.Tasha2.Data
 
         private Person[] _Persons;
 
-        public ReadOnlySpan<Person> Persons { get; }
+        /// <summary>
+        /// Get a referecne to the persons available in the household
+        /// </summary>
+        public ReadOnlySpan<Person> Persons => new ReadOnlySpan<Person>(_Persons);
 
         private int _NumberOfAdults = -1;
 
         /// <summary>
         /// Get the number of persons who are adults.
         /// </summary>
-        public int NumberOfAdults
-        {
-            get
-            {
-                if(_NumberOfAdults < 0)
-                {
-                    return (_NumberOfAdults = _Persons.Count(p => p.Adult));
-                }
-                return _NumberOfAdults;
-            }
-        }
+        public int NumberOfAdults => _NumberOfAdults >= 0 ? _NumberOfAdults
+                    : (_NumberOfAdults = _Persons.Count(p => p.Adult));
 
         /// <summary>
         /// Get the number of persons who are children.
         /// </summary>
         public int NumberOfChildren => _Persons.Length - NumberOfAdults;
 
+        public Household(int id, Person[] persons, int vehicles)
+        {
+            ID = id;
+            _Persons = persons;
+            Vehicles = vehicles;
+        }
 
+        public IEnumerator<Person> GetEnumerator() => ((IEnumerable<Person>)_Persons).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => _Persons.GetEnumerator();
     }
 }
