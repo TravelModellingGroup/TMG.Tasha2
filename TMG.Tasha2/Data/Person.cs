@@ -61,24 +61,24 @@ namespace TMG.Tasha2.Data
         /// <summary>
         /// An index into the Occupation Categories
         /// </summary>
-        public int Occupation { get; private set; }
+        public CategoryIndex Occupation { get; private set; }
 
         /// <summary>
         /// An index into the Zone System category where this person is employed.
         /// -1 if they do not have an employment zone.
         /// </summary>
-        public int EmploymentZone { get; set; } = -1;
+        public CategoryIndex EmploymentZone { get; set; } = -1;
 
         /// <summary>
         /// An index into the Zone System category where this person goes to school.
         /// -1 if they do not have a school zone.
         /// </summary>
-        public int SchoolZone { get; set; } = -1;
+        public CategoryIndex SchoolZone { get; set; } = -1;
 
         /// <summary>
         /// An index into the Employment Statuses
         /// </summary>
-        public int EmploymentStatus { get; private set; }
+        public CategoryIndex EmploymentStatus { get; private set; }
 
         /// <summary>
         /// Does this person have a driver's license?

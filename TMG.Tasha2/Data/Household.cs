@@ -38,7 +38,7 @@ namespace TMG.Tasha2.Data
         /// The index in the current zone system that this
         /// household resides in.
         /// </summary>
-        public int HouseholdZoneIndex { get; private set; }
+        public CategoryIndex HouseholdZone { get; private set; }
 
         /// <summary>
         /// The number of vehicles that are available to the household
@@ -65,9 +65,10 @@ namespace TMG.Tasha2.Data
         /// </summary>
         public int NumberOfChildren => _Persons.Length - NumberOfAdults;
 
-        public Household(int id, Person[] persons, int vehicles)
+        public Household(int id, CategoryIndex householdZone, Person[] persons, int vehicles)
         {
             ID = id;
+            HouseholdZone = householdZone;
             _Persons = persons;
             Vehicles = vehicles;
         }
