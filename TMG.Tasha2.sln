@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMG.Tasha2", "TMG.Tasha2\TMG.Tasha2.csproj", "{AC12FD08-798B-4EDD-B0A2-43B5F56460CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMG.Tasha2", "TMG.Tasha2\TMG.Tasha2.csproj", "{AC12FD08-798B-4EDD-B0A2-43B5F56460CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMG-Framework", "TMG-Framework\TMG-Framework\TMG-Framework\TMG-Framework.csproj", "{29471EE3-80A4-4E02-9D95-CCB8233C869F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2", "TMG-Framework\XTMF2\XTMF2\XTMF2\XTMF2.csproj", "{77483A27-31FE-4D25-908D-C3F9CC2C0AF6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMFInterfaces", "TMG-Framework\XTMF2\XTMF2\XTMFInterfaces\XTMFInterfaces.csproj", "{930ED770-1338-42BF-8715-9F72566F0267}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMG.Tasha2.Test", "TMG.Tasha2.Test\TMG.Tasha2.Test.csproj", "{A16C3E55-BCC8-4106-91A9-ADF476815865}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{930ED770-1338-42BF-8715-9F72566F0267}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{930ED770-1338-42BF-8715-9F72566F0267}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{930ED770-1338-42BF-8715-9F72566F0267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A16C3E55-BCC8-4106-91A9-ADF476815865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A16C3E55-BCC8-4106-91A9-ADF476815865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A16C3E55-BCC8-4106-91A9-ADF476815865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A16C3E55-BCC8-4106-91A9-ADF476815865}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
