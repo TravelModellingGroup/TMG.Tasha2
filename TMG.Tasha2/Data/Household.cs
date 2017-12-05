@@ -48,7 +48,7 @@ namespace TMG.Tasha2.Data
         private Person[] _Persons;
 
         /// <summary>
-        /// Get a referecne to the persons available in the household
+        /// Get a reference to the persons available in the household
         /// </summary>
         public ReadOnlySpan<Person> Persons => new ReadOnlySpan<Person>(_Persons);
 
