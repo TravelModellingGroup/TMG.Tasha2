@@ -85,9 +85,9 @@ namespace TMG.Tasha2.Data
         /// </summary>
         public readonly bool DriversLicense;
 
-        private TripChain[] _TripChains;
+        private TripChain[] _tripChains;
 
-        public ReadOnlySpan<TripChain> TripChains => new ReadOnlySpan<TripChain>(_TripChains);
+        public ReadOnlySpan<TripChain> TripChains => new ReadOnlySpan<TripChain>(_tripChains);
 
         /// <summary>
         /// Create a new person with the given attributes.
@@ -112,11 +112,11 @@ namespace TMG.Tasha2.Data
         /// <param name="chains">The trip chains to assign</param>
         public void SetTrips(TripChain[] chains)
         {
-            _TripChains = chains ?? throw new ArgumentNullException(nameof(chains));
+            _tripChains = chains ?? throw new ArgumentNullException(nameof(chains));
         }
 
-        public IEnumerator<TripChain> GetEnumerator() => ((IEnumerable<TripChain>)_TripChains).GetEnumerator();
+        public IEnumerator<TripChain> GetEnumerator() => ((IEnumerable<TripChain>)_tripChains).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => _TripChains.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _tripChains.GetEnumerator();
     }
 }

@@ -45,36 +45,36 @@ namespace TMG.Tasha2.Data
         /// </summary>
         public int Vehicles { get; private set; }
 
-        private Person[] _Persons;
+        private Person[] _persons;
 
         /// <summary>
         /// Get a reference to the persons available in the household
         /// </summary>
-        public ReadOnlySpan<Person> Persons => new ReadOnlySpan<Person>(_Persons);
+        public ReadOnlySpan<Person> Persons => new ReadOnlySpan<Person>(_persons);
 
-        private int _NumberOfAdults = -1;
+        private int _numberOfAdults = -1;
 
         /// <summary>
         /// Get the number of persons who are adults.
         /// </summary>
-        public int NumberOfAdults => _NumberOfAdults >= 0 ? _NumberOfAdults
-                    : (_NumberOfAdults = _Persons.Count(p => p.Adult));
+        public int NumberOfAdults => _numberOfAdults >= 0 ? _numberOfAdults
+                    : (_numberOfAdults = _persons.Count(p => p.Adult));
 
         /// <summary>
         /// Get the number of persons who are children.
         /// </summary>
-        public int NumberOfChildren => _Persons.Length - NumberOfAdults;
+        public int NumberOfChildren => _persons.Length - NumberOfAdults;
 
         public Household(int id, CategoryIndex householdZone, Person[] persons, int vehicles)
         {
             ID = id;
             HouseholdZone = householdZone;
-            _Persons = persons;
+            _persons = persons;
             Vehicles = vehicles;
         }
 
-        public IEnumerator<Person> GetEnumerator() => ((IEnumerable<Person>)_Persons).GetEnumerator();
+        public IEnumerator<Person> GetEnumerator() => ((IEnumerable<Person>)_persons).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => _Persons.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _persons.GetEnumerator();
     }
 }
