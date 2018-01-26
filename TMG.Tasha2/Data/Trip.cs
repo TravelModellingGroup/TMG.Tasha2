@@ -18,11 +18,48 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace TMG.Tasha2.Data
 {
     public sealed class Trip
     {
+        /// <summary>
+        /// The time the trip starts
+        /// </summary>
+        public Time StartTime { get; internal set; }
+
+        /// <summary>
+        /// The time the trip arrives at the activity
+        /// </summary>
+        public Time ActivityStartTime { get; internal set; }
+
+        /// <summary>
+        /// The flat index into the zone system where the trip starts
+        /// </summary>
+        public int OriginZone { get; set; }
+
+        /// <summary>
+        /// The flat index into the zone system where the trip ends
+        /// </summary>
+        public int DestinationZones { get; set; }
+
+        /// <summary>
+        /// Attached values for the trip.
+        /// </summary>
+        /// <param name="propertyName">The name of the property to access.</param>
+        /// <returns>The attached property, or null if it doesn't exist.</returns>
+        public object this[string propertyName]
+        {
+            get
+            {
+                _attachedProperties.TryGetValue(propertyName, out var ret);
+                return ret;
+            }
+            set => _attachedProperties[propertyName] = value;
+        }
+
+        private ConcurrentDictionary<string, object> _attachedProperties = new ConcurrentDictionary<string, object>();
     }
 }

@@ -20,27 +20,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using XTMF2;
+using TMG.Tasha2.Functions;
 
 namespace TMG.Tasha2.Modules
 {
-    [Module(Name = "Discrete Choice", Description = "Returns a random index from a probability vector as a discrete choice.",
+    [Module(Name = "Discrete Choice From Probabilities", Description = "Returns a random index from a probability vector as a discrete choice.",
         DocumentationLink = "http://tmg.utoronto.ca/doc/2.0")]
-    public sealed class DiscreteChoice : BaseFunction<(TMGRandom, float[]), int>
+    public sealed class DiscreteChoiceFromProbabilities : BaseFunction<(TMGRandom, float[]), int>
     {
         public override int Invoke((TMGRandom, float[]) context)
         {
-            var (r, data) = context;
-            var pop = r.Pop();
-            var acc = 0.0f;
-            for (int i = 0; i < data.Length; i++)
-            {
-                acc += data[i];
-                if(acc >= pop)
-                {
-                    return i;
-                }
-            }
-            return data.Length - 1;
+            return Choice.DiscreteChoiceFromProbabilities(context.Item1, context.Item2);
+        }
+    }
+
+    [Module(Name = "Discrete Choice From CDF", Description = "Returns a random index from a probability vector as a discrete choice.",
+        DocumentationLink = "http://tmg.utoronto.ca/doc/2.0")]
+    public sealed class DiscreteChoiceFromCDF : BaseFunction<(TMGRandom, float[]), int>
+    {
+        public override int Invoke((TMGRandom, float[]) context)
+        {
+            return Choice.DiscreteChoiceFromCDF(context.Item1, context.Item2);
         }
     }
 }

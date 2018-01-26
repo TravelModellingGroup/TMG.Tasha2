@@ -18,6 +18,7 @@
 */
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
@@ -118,5 +119,22 @@ namespace TMG.Tasha2.Data
         public IEnumerator<TripChain> GetEnumerator() => ((IEnumerable<TripChain>)_tripChains).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _tripChains.GetEnumerator();
+
+        /// <summary>
+        /// Attached values for the trip.
+        /// </summary>
+        /// <param name="propertyName">The name of the property to access.</param>
+        /// <returns>The attached property, or null if it doesn't exist.</returns>
+        public object this[string propertyName]
+        {
+            get
+            {
+                _attachedProperties.TryGetValue(propertyName, out var ret);
+                return ret;
+            }
+            set => _attachedProperties[propertyName] = value;
+        }
+
+        private ConcurrentDictionary<string, object> _attachedProperties = new ConcurrentDictionary<string, object>();
     }
 }

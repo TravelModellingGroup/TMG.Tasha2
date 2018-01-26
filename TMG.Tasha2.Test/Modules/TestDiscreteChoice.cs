@@ -32,7 +32,7 @@ namespace TMG.Tasha2.Test
         public void DiscreteChoice()
         {
             var r = new TMGRandom(12345);
-            var choiceModel = new DiscreteChoice()
+            var choiceModel = new DiscreteChoiceFromProbabilities()
             {
                 Name = "Choice Model"
             };

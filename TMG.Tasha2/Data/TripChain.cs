@@ -17,12 +17,48 @@
     along with TMG.Tasha2.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TMG.Tasha2.Data
 {
-    public sealed class TripChain
+    public sealed class TripChain : IEnumerable<Trip>
     {
+        private Trip[] _trips;
+
+        public ReadOnlySpan<Trip> Trips => new ReadOnlySpan<Trip>(_trips);
+
+        public Time StartTime => _trips[0].StartTime;
+
+        public Time EndTime => _trips.Last().ActivityStartTime;
+
+        public TripChain(Trip[] trips)
+        {
+            _trips = trips;
+        }
+
+        public IEnumerator<Trip> GetEnumerator() => ((IEnumerable<Trip>)_trips).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => _trips.GetEnumerator();
+
+        /// <summary>
+        /// Attached values for the trip.
+        /// </summary>
+        /// <param name="propertyName">The name of the property to access.</param>
+        /// <returns>The attached property, or null if it doesn't exist.</returns>
+        public object this[string propertyName]
+        {
+            get
+            {
+                _attachedProperties.TryGetValue(propertyName, out var ret);
+                return ret;
+            }
+            set => _attachedProperties[propertyName] = value;
+        }
+
+        private ConcurrentDictionary<string, object> _attachedProperties = new ConcurrentDictionary<string, object>();
     }
 }
