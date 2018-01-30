@@ -31,15 +31,20 @@ namespace TMG.Tasha2.Modules
         [SubModule(Index = 0, Name = "Household Loader", Required = true)]
         public IFunction<IEnumerable<Household>> HouseholdLoader;
 
-        [SubModule(Index = 1, Name = "Scheduler", Required = true)]
+        [SubModule(Index = 1, Name = "Scheduler", Required = false)]
         public IFunction<IEnumerable<(TMGRandom, Household)>, IEnumerable<(TMGRandom, Household)>> Scheduler;
 
-        [SubModule(Index = 2, Name = "ModeChoice", Required = true)]
+        [SubModule(Index = 2, Name = "ModeChoice", Required = false)]
         public IFunction<IEnumerable<(TMGRandom, Household)>, IEnumerable<(TMGRandom, Household)>> ModeChoice;
 
         [Parameter(Index = 3, Name = "RandomSeed", Required = true, DefaultValue = "12345")]
         public IFunction<int> RandomSeed;
 
+        /// <summary>
+        /// Create a new enumeration that combines households with the random number generator to use during the main algorithm.
+        /// </summary>
+        /// <param name="households">The stream of households to process</param>
+        /// <returns></returns>
         private IEnumerable<(TMGRandom,Household)> CombineWithRandomSeeds(IEnumerable<Household> households)
         {
             var seedBase = RandomSeed.Invoke();
@@ -49,9 +54,30 @@ namespace TMG.Tasha2.Modules
             }
         }
 
+        /// <summary>
+        /// Constructs a pipe depending on the optional submodules for the module.
+        /// </summary>
+        /// <returns>A pipe that contains all of the contained submodules</returns>
+        private IEnumerable<(TMGRandom, Household)> GetPipe()
+        {
+            if (ModeChoice != null && Scheduler != null)
+            {
+                return ModeChoice.Invoke(Scheduler.Invoke(CombineWithRandomSeeds(HouseholdLoader.Invoke())));
+            }
+            if(ModeChoice != null)
+            {
+                return ModeChoice.Invoke(CombineWithRandomSeeds(HouseholdLoader.Invoke()));
+            }
+            if(Scheduler != null)
+            {
+                return Scheduler.Invoke(CombineWithRandomSeeds(HouseholdLoader.Invoke()));
+            }
+            return CombineWithRandomSeeds(HouseholdLoader.Invoke());
+        }
+
         public override void Invoke()
         {
-            using (var pipe = ModeChoice.Invoke(Scheduler.Invoke(CombineWithRandomSeeds(HouseholdLoader.Invoke()))).GetEnumerator())
+            using (var pipe = GetPipe().GetEnumerator())
             {
                 // keep moving through the pipe to execute all households
                 while (pipe.MoveNext()) ;
