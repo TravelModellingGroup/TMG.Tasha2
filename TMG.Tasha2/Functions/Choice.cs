@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using TMG.Utilities;
 
 namespace TMG.Tasha2.Functions
 {
@@ -34,7 +35,7 @@ namespace TMG.Tasha2.Functions
         /// <param name="random">The random algorithm to use.</param>
         /// <param name="probabilities">The probability vector to chose from.</param>
         /// <returns>The index that was selected.</returns>
-        public static int DiscreteChoiceFromProbabilities(TMGRandom random, float[] probabilities)
+        public static int DiscreteChoiceFromProbabilities(TMGRandom random, Span<float> probabilities)
         {
             var pop = random.Pop();
             var acc = 0.0f;
@@ -55,7 +56,7 @@ namespace TMG.Tasha2.Functions
         /// <param name="random">The random algorithm to use.</param>
         /// <param name="cdf">The CDF vector to chose from.</param>
         /// <returns>The index that was selected.</returns>
-        public static int DiscreteChoiceFromCDF(TMGRandom random, float[] cdf)
+        public static int DiscreteChoiceFromCDF(TMGRandom random, Span<float> cdf)
         {
             var pop = random.Pop();
             // there is no need to check the last element
@@ -67,6 +68,23 @@ namespace TMG.Tasha2.Functions
                 }
             }
             return cdf.Length - 1;
+        }
+
+        /// <summary>
+        /// Converts a span of probabilities that add up to 1 into a CDF.
+        /// </summary>
+        /// <param name="probabilities">The probabilities to convert.</param>
+        public static void ConvertProbabilitiesToCDF(Span<float> probabilities)
+        {
+            if(probabilities.Length > 0)
+            {
+                return;
+            }
+            var acc = probabilities[0];
+            for (int i = 1; i < probabilities.Length; i++)
+            {
+                acc += (probabilities[i] = probabilities[i - 1] + acc);
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace TMG.Tasha2.Test
     public class TestDiscreteChoice
     {
         [TestMethod]
-        public void DiscreteChoice()
+        public void DiscreteChoiceFromProbabilities()
         {
             var r = new TMGRandom(12345);
             var choiceModel = new DiscreteChoiceFromProbabilities()
@@ -51,6 +51,39 @@ namespace TMG.Tasha2.Test
                     Assert.Fail("Generated a number less than zero!");
                 }
                 if(result >= data.Length)
+                {
+                    Assert.Fail("Generated a number greater than the number of choices!");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void DiscreteChoiceFromCDF()
+        {
+            var r = new TMGRandom(12345);
+            var choiceModel = new DiscreteChoiceFromCDF()
+            {
+                Name = "Choice Model"
+            };
+            float[] data = Enumerable.Repeat(0f, 100).ToArray();
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = r.Pop();
+            }
+            var invSum = 1.0f / VectorHelper.Sum(data, 0, data.Length);
+            data[0] *= invSum; 
+            for (int i = 1; i < data.Length; i++)
+            {
+                data[i] = (data[i] * invSum) + data[i - 1];
+            }
+            for (int i = 0; i < 100; i++)
+            {
+                var result = choiceModel.Invoke((r, data));
+                if (result < 0)
+                {
+                    Assert.Fail("Generated a number less than zero!");
+                }
+                if (result >= data.Length)
                 {
                     Assert.Fail("Generated a number greater than the number of choices!");
                 }
