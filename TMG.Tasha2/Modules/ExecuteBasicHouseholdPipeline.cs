@@ -42,15 +42,20 @@ namespace TMG.Tasha2.Modules
 
         private IEnumerable<(TMGRandom,Household)> CombineWithRandomSeeds(IEnumerable<Household> households)
         {
-            foreach(var hhld in households)
+            var seedBase = RandomSeed.Invoke();
+            foreach (var hhld in households)
             {
-                yield return (new TMGRandom(hhld.ID), hhld);
+                yield return (new TMGRandom(hhld.ID * seedBase), hhld);
             }
         }
 
         public override void Invoke()
         {
-            ModeChoice.Invoke(Scheduler.Invoke(CombineWithRandomSeeds(HouseholdLoader.Invoke())));
+            using (var pipe = ModeChoice.Invoke(Scheduler.Invoke(CombineWithRandomSeeds(HouseholdLoader.Invoke()))).GetEnumerator())
+            {
+                // keep moving through the pipe to execute all households
+                while (pipe.MoveNext()) ;
+            }
         }
     }
 }
