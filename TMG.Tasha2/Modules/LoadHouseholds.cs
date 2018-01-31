@@ -23,6 +23,7 @@ using XTMF2;
 using TMG.Tasha2.Data;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using TMG.Utilities;
 
 namespace TMG.Tasha2.Modules
 {
@@ -34,7 +35,10 @@ namespace TMG.Tasha2.Modules
         public IFunction<ReadStream> HouseholdStream;
 
         [SubModule(Index = 1, Name = "Load Persons", Description = "", Required = true)]
-        public IFunction<Household, Person[]> LoadPersons;
+        public IFunction<int, Person[]> LoadPersons;
+
+        [SubModule(Index = 2, Name = "Zone System", Description = "The zone system to link for home zones.", Required = true)]
+        public IFunction<Categories> ZoneSystem;
 
         /// <summary>
         /// Used for moving data to the rest of the pipeline
@@ -47,6 +51,23 @@ namespace TMG.Tasha2.Modules
             _stream = new BlockingCollection<Household>(Environment.ProcessorCount * 10);
             Task.Run(() =>
             {
+                var zones = ZoneSystem.Invoke();
+                using (var reader = new CsvReader(HouseholdStream.Invoke()))
+                {
+                    // burn the header
+                    reader.LoadLine();
+                    while (reader.LoadLine(out var columns))
+                    {
+                        reader.Get(out int householdID, 0);
+                        reader.Get(out int householdZone, 1);
+                        reader.Get(out float expFactor, 2);
+                        reader.Get(out int dwellingType, 3);
+                        reader.Get(out int numberOfPersons, 4);
+                        reader.Get(out int numberOfVehicles, 5);
+                        _stream.Add(new Household(householdID, zones.GetFlatIndex(householdZone),
+                            LoadPersons.Invoke(householdID), numberOfVehicles));
+                    }
+                }
                 _stream.CompleteAdding();
             });
             return _stream.GetConsumingEnumerable();
