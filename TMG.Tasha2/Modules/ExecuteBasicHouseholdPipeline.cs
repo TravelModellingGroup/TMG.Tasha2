@@ -26,7 +26,7 @@ namespace TMG.Tasha2.Modules
 {
     [Module(Name = "Basic Household Pipe", Description = "Chains together a loader of households with the scheduler and mode choice.",
         DocumentationLink = "http://tmg.utoronto.ca/doc/2.0")]
-    public class ExecuteBasicHouseholdPipeline : BaseAction
+    public sealed class ExecuteBasicHouseholdPipeline : BaseAction
     {
         [SubModule(Index = 0, Name = "Household Loader", Required = true)]
         public IFunction<IEnumerable<Household>> HouseholdLoader;

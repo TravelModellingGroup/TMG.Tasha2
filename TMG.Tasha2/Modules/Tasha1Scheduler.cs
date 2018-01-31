@@ -27,10 +27,11 @@ namespace TMG.Tasha2.Modules
 {
     [Module(Name = "Tasha1Scheduler", Description = "The TASHA/1 scheduler converted for XTMF2.",
         DocumentationLink = "http://tmg.utoronto.ca/doc/2.0")]
-    public class Tasha1Scheduler : BaseFunction<(TMGRandom, Household), (TMGRandom, Household)>
+    public sealed class Tasha1Scheduler : BaseFunction<(TMGRandom, Household), (TMGRandom, Household)>
     {
         public override (TMGRandom, Household) Invoke((TMGRandom, Household) context)
         {
+            // do nothing for now.
             return context;
         }
     }
