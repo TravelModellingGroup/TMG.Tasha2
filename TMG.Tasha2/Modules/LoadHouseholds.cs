@@ -58,14 +58,17 @@ namespace TMG.Tasha2.Modules
                     reader.LoadLine();
                     while (reader.LoadLine(out var columns))
                     {
-                        reader.Get(out int householdID, 0);
-                        reader.Get(out int householdZone, 1);
-                        reader.Get(out float expFactor, 2);
-                        reader.Get(out int dwellingType, 3);
-                        reader.Get(out int numberOfPersons, 4);
-                        reader.Get(out int numberOfVehicles, 5);
-                        _stream.Add(new Household(householdID, zones.GetFlatIndex(householdZone),
-                            LoadPersons.Invoke(householdID), numberOfVehicles));
+                        if (columns >= 6)
+                        {
+                            reader.Get(out int householdID, 0);
+                            reader.Get(out int householdZone, 1);
+                            reader.Get(out float expFactor, 2);
+                            reader.Get(out int dwellingType, 3);
+                            reader.Get(out int numberOfPersons, 4);
+                            reader.Get(out int numberOfVehicles, 5);
+                            _stream.Add(new Household(householdID, zones.GetFlatIndex(householdZone),
+                                LoadPersons.Invoke(householdID), numberOfVehicles));
+                        }
                     }
                 }
                 _stream.CompleteAdding();
