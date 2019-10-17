@@ -1,4 +1,4 @@
 @Echo Off
 cd TMG-Framework
-git pull --recurse-submodules=on origin dev
+git submodule update --recursive --remote
 cd ..
